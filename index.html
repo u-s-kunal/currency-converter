@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
+
+<body>
+    <div class="main-div">
+
+        <!-- input  -->
+        <form class="main" id="form">
+            <h1 class="heading">All Currency Convertor</h1>
+            <span class="input">
+                <input id="amount" type="text" placeholder="Enter your Amount....">
+            </span>
+
+            <div class="text" >
+                <p>FROM</p>
+                <p>TO</p>
+            </div>
+            <div class="flags">
+                <!-- From  -->
+                <span class="from selection">
+                    <div class="flag" id="flagFrom">
+                        <img src="https://flagsapi.com/AE/shiny/64.png">
+                    </div>
+                    <div class="country_code" id=" fromC">
+                        <select id="from_select">
+                        </select>
+                    </div>
+
+                </span>
+
+                <!-- conversion symbol -->
+                <div class="convertor_img">
+                    <i class=" convertor_img fa-solid fa-arrow-right-arrow-left" style="color: #ffffff;"></i>
+                </div>
+
+
+                <!-- to -->
+                <div class="to selection">
+
+                    <div class="flag" id="flagTo">
+                        <img src="https://flagsapi.com/AE/shiny/64.png">
+                    </div>
+                    <div class="country_code" id="toC">
+                        <select id="to_select">
+                        </select>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <button id="convertorBtn"> Click to Convert</button>
+            <!-- Hover #3 -->
+
+
+            
+
+            <div id="result">
+                <b> Result will be displayed here...!!!</b>
+            </div>
+
+        </form>
+    </div>
+
+
+
+
+    <script src="logic.js"></script>
+</body>
+
+</html>
