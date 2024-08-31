@@ -264,7 +264,7 @@ convertorBtn.onclick = () => {
     resultDisplay.innerHTML = `<b style="color: rgb(189, 46, 46);"> Enter A valid Input  !!!</b>`;
   } else {
     console.log(`final value = ${finalValue}`);
-    resultDisplay.innerHTML = ` Amount =  ${finalValue}`;
+    resultDisplay.innerHTML = ` Amount =  ${finalValue.toFixed(2)}`;
   }
 };
 
