@@ -3,7 +3,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const resultDisplay = document.getElementById("result");
   const select = document.querySelectorAll("select");
   const convertorBtn = document.getElementById("convertorBtn");
-  const input = document.querySelector(".input");
+  const input = document.querySelector("input");
+  const fromSelect = document.getElementById("from_select");
+  const toSelect = document.getElementById("to_select");
+  const swapBtn = document.querySelector(".convertor_img"); // the arrow button
+
   let inputValue = 0;
   let Rates = {};
 
@@ -38,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     THB: "TH",
     TRY: "TR",
     ZAR: "ZA",
-    USD: "US", // base currency
+    USD: "US",
   };
 
   const CurrencyToCountry = {
@@ -72,10 +76,10 @@ document.addEventListener("DOMContentLoaded", () => {
     THB: "Thailand",
     TRY: "Turkey",
     ZAR: "South Africa",
-    USD: "United States", // base currency
+    USD: "United States",
   };
 
-  // Fetch currency rates from Frankfurter API
+  // Fetch currency rates
   const getRates = async () => {
     try {
       const response = await fetch(
@@ -84,24 +88,23 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!response.ok) throw new Error("Network response was not ok");
       const data = await response.json();
       Rates = data.rates;
-      Rates[data.base] = 1; // Add base currency USD
+      Rates[data.base] = 1;
 
       // Populate select options
       for (const code in Rates) {
         select.forEach((s) => {
           const option = document.createElement("option");
-          option.textContent = CurrencyToCountry[code] || code; // show country name
+          option.textContent = CurrencyToCountry[code] || code;
           option.value = Rates[code];
           option.dataset.code = code;
 
-          // Make USD default in "from_select"
+          // Default selections
           if (code === "USD" && s.id === "from_select") {
             option.selected = true;
             document.getElementById(
               "flagFrom"
             ).innerHTML = `<img src="https://flagsapi.com/${CurrencyToCountryCode[code]}/shiny/64.png">`;
           }
-          // Make INR default in "to_select"
           if (code === "INR" && s.id === "to_select") {
             option.selected = true;
             document.getElementById(
@@ -128,21 +131,20 @@ document.addEventListener("DOMContentLoaded", () => {
   amount.addEventListener("input", (e) => {
     const val = e.target.value;
     if (!isNaN(val) && val !== "") {
-      input.style.background = "rgb(225, 225, 228)";
+      input.style.background = "rgba(40, 40, 40, 0.8)";
       input.style.border = "none";
-      convertorBtn.style.backgroundColor = "rgb(56, 153, 54)";
+      convertorBtn.style.background =
+        "linear-gradient(90deg, #b51732ff, #111769ff)";
+      convertorBtn.style.color = "#fff";
     } else {
-      input.style.border = "3px solid rgb(189, 46, 46)";
-      input.style.background = "rgba(242, 125, 125, 0.80)";
-      convertorBtn.style.backgroundColor = "rgb(63, 68, 63)";
+      input.style.border = "2px solid #ff4d4d";
+      convertorBtn.style.background = "rgba(63, 68, 63, 0.8)";
+      convertorBtn.style.color = "#ccc";
     }
   });
 
   // Conversion logic
-  convertorBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    const fromSelect = document.getElementById("from_select");
-    const toSelect = document.getElementById("to_select");
+  const convertCurrency = () => {
     const rateOfFrom = parseFloat(fromSelect.value);
     const rateOfTo = parseFloat(toSelect.value);
 
@@ -153,19 +155,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const finalValue = (inputValue / rateOfFrom) * rateOfTo;
     resultDisplay.innerHTML = `Amount = ${finalValue.toFixed(2)}`;
+  };
+
+  convertorBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    convertCurrency();
   });
 
-  // Flag update logic
+  // Update flag
   const updateFlag = (selectElem, flagElemId) => {
     selectElem.addEventListener("change", (e) => {
       const currencyCode = e.target.selectedOptions[0].dataset.code;
-      const flagCode = CurrencyToCountryCode[currencyCode] || "UN"; // fallback
+      const flagCode = CurrencyToCountryCode[currencyCode] || "UN";
       document.getElementById(
         flagElemId
       ).innerHTML = `<img src="https://flagsapi.com/${flagCode}/shiny/64.png">`;
+      convertCurrency();
     });
   };
 
-  updateFlag(document.getElementById("from_select"), "flagFrom");
-  updateFlag(document.getElementById("to_select"), "flagTo");
+  updateFlag(fromSelect, "flagFrom");
+  updateFlag(toSelect, "flagTo");
+
+  // Swap currencies on arrow click
+  swapBtn.addEventListener("click", () => {
+    // Swap selected indices
+    const tempIndex = fromSelect.selectedIndex;
+    fromSelect.selectedIndex = toSelect.selectedIndex;
+    toSelect.selectedIndex = tempIndex;
+
+    // Swap flags manually
+    const tempFlag = document.getElementById("flagFrom").innerHTML;
+    document.getElementById("flagFrom").innerHTML =
+      document.getElementById("flagTo").innerHTML;
+    document.getElementById("flagTo").innerHTML = tempFlag;
+
+    convertCurrency();
+  });
 });

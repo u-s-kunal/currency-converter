@@ -1,203 +1,192 @@
+/* Reset and basic */
 * {
-  padding: 0;
   margin: 0;
-  font-family: sans-serif;
-  width: auto;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
 }
 
 body {
-  background-color: rgb(246, 247, 245);
-  color: rgb(66, 65, 65);
+  background: linear-gradient(135deg, #686767, #2c2c2c);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  color: #fff;
 }
 
+/* Main container */
 .main-div {
   display: flex;
-  align-items: center;
   justify-content: center;
-  margin: 2rem;
-  flex-wrap: wrap;
+  align-items: center;
+  width: 100%;
+  padding: 2rem;
 }
 
+/* Glassmorphism card */
 .main {
-  background-color: rgb(106, 156, 137);
-  height: auto;
-  text-align: center;
+  background: rgba(20, 20, 20, 0.75);
+  backdrop-filter: blur(20px);
   border-radius: 20px;
-  padding: 10px;
-  width: 60vw;
-  box-shadow: 0px 0px 30px 6px rgba(0, 0, 0, 0.311);
-  border: 2px solid black;
-}
-
-.heading {
-  height: 5rem;
+  padding: 3rem;
+  width: 550px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   text-align: center;
-  background-color: rgb(205, 92, 8);
-  padding: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 10px;
-  font-size: 2rem;
+  color: #f0f0f0;
 }
 
-.input,
+/* Heading */
+.heading {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #de082c, #441571);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Amount input */
 input {
+  width: 100%;
+  padding: 1.8rem;
+  font-size: 1.5rem;
+  border-radius: 15px;
   border: none;
-  margin: 2rem 0rem;
-  font-weight: 800;
-  background-color: transparent;
-  cursor: pointer;
   outline: none;
   text-align: center;
-  height: 5rem;
-  width: 40vw;
-  font-size: 1.5rem;
-
-
+  margin-bottom: 2rem;
+  background-color: rgba(40, 40, 40, 0.8);
+  color: #fff;
+  transition: 0.3s ease;
 }
 
-.input {
-  background-color: rgb(225, 225, 228);
-  margin: 0rem;
-  border-radius: 20px;
-  padding: 1rem;
+input:focus {
+  background-color: rgba(0, 0, 0, 0.9);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
   border: none;
-
+  outline-style: none;
 }
 
+/* FROM / TO labels */
 .text {
   display: flex;
-  text-align: center;
-  justify-content: space-around;
-  align-items: center;
-  margin-top: 2rem;
-  font-weight: bolder;
-  font-size: 1.3rem;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #ccc;
 }
-
-.fa-arrow-right-arrow-left {
-  font-size: 3rem;
+.convertor_img {
+  cursor: pointer;
 }
-
+/* Flags and select layout */
 .flags {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  border-radius: 10px;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
-  margin: 1rem;
+  margin-bottom: 2rem;
 }
 
-img {
-  min-width: 6rem;
-}
 .selection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+/* Flag images */
+.flag img {
+  width: 100px;
+  height: auto;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
+}
+
+/* Select styling */
+select {
+  width: 100%;
+  padding: 1rem 1.2rem;
+  border-radius: 15px;
+  border: none;
+  background: rgba(50, 50, 50, 0.85);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+  font-size: 1.2rem;
+}
+
+select:hover {
+  background: rgba(70, 70, 70, 0.9);
+}
+
+/* Conversion arrow */
+.convertor_img {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
+  font-size: 2.5rem;
+  margin: 0 1rem;
+  color: #fff;
 }
 
-select,
-.FromSelect {
-  background-color: rgb(159, 26, 26);
-  padding: 1rem;
-  border: none;
-  outline: none;
-  width: auto;
-  cursor: pointer;
-  border-radius: 10px;
-  color: aliceblue;
-  font-size: 1.2rem;
-  margin-bottom: 1.5rem;
-
-}
-
-.Current_value {
-  color: aliceblue;
-  margin: 1rem;
-}
-
+/* Convert button */
 #convertorBtn {
-   background-color: rgb(70, 126, 74); 
-  outline: none;
-  border: 2px solid rgb(56, 54, 54);
-  color: aliceblue;
-  padding: 1rem;
-  border-radius: 10px; 
-  margin: 1.5rem 0;
-   min-width: 80%;
-  font-size: 1.5rem; 
-  transition:  0.5s linear;
+  background: linear-gradient(90deg, #ae122c, #093772);
+  color: #fff;
+  font-size: 1.3rem;
+  padding: 1.3rem 2rem;
+  border: none;
+  border-radius: 15px;
   cursor: pointer;
-
-
+  font-weight: 700;
+  transition: 0.3s ease;
+  width: 100%;
+  margin-bottom: 1rem;
 }
+
 #convertorBtn:hover {
-  background-color: rgb(138, 33, 33);
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
 }
 
-
-
+/* Result box */
 #result {
-  color: aliceblue;
-  margin: 1rem;
-  font-weight: bolder;
+  background: rgba(50, 50, 50, 0.9);
   padding: 1rem;
-  font-size: 1.5rem;
+  border-radius: 15px;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
 }
 
-@media screen and (max-width: 1000px) {
+/* Responsive */
+@media screen and (max-width: 600px) {
   .main {
-    height: auto;
-    padding: 10px;
-    width: 86vw;
-  }
-  .heading {
-    font-size: 3rem;
-    margin-bottom: 4rem;
+    width: 90%;
     padding: 2rem;
+  }
+
+  .flag img {
+    width: 80px;
+  }
+
+  select {
+    font-size: 1rem;
+    padding: 0.8rem 1rem;
+  }
+
+  #convertorBtn {
+    font-size: 1rem;
+    padding: 1rem;
   }
 
   input {
-    height: 5rem;
-    font-size: 2rem;
-    width: 60vw;
+    padding: 1.5rem;
+    font-size: 1.2rem;
   }
-  .input {
-    padding: 3rem;
-  }
-  .text {
-    height: 4rem;
-    font-size: 2rem;
-  }
-
-  img {
-    min-width: 12rem;
-  }
-
-  
-  select,
-  .FromSelect {
-   font-size: 2rem;
-  padding: 2rem;
-
 }
-#convertorBtn {
-    font-size: 2rem;
-    padding: 2rem;
-    margin: 7rem 0;
-
-  }
-
-  #result {
-    
-    font-size: 3rem;
-    
-
-  }
-
-
-}
-
