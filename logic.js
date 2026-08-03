@@ -1,160 +1,126 @@
+import CurrencyToCountryCode from "./CurrencyToCountryCode.js";
+import CurrencyToCountry from "./CurrencyToCountry.js";
+
 document.addEventListener("DOMContentLoaded", () => {
   const amount = document.getElementById("amount");
   const resultDisplay = document.getElementById("result");
-  const select = document.querySelectorAll("select");
+  const selects = document.querySelectorAll("select");
   const convertorBtn = document.getElementById("convertorBtn");
-  const input = document.querySelector("input");
   const fromSelect = document.getElementById("from_select");
   const toSelect = document.getElementById("to_select");
-  const swapBtn = document.querySelector(".convertor_img"); // the arrow button
+  const swapBtn = document.querySelector(".convertor_img");
 
-  let inputValue = 0;
-  let Rates = {};
+  const flagFrom = document.getElementById("flagFrom");
+  const flagTo = document.getElementById("flagTo");
 
-  const CurrencyToCountryCode = {
-    AUD: "AU",
-    BGN: "BG",
-    BRL: "BR",
-    CAD: "CA",
-    CHF: "CH",
-    CNY: "CN",
-    CZK: "CZ",
-    DKK: "DK",
-    EUR: "EU",
-    GBP: "GB",
-    HKD: "HK",
-    HUF: "HU",
-    IDR: "ID",
-    ILS: "IL",
-    INR: "IN",
-    ISK: "IS",
-    JPY: "JP",
-    KRW: "KR",
-    MXN: "MX",
-    MYR: "MY",
-    NOK: "NO",
-    NZD: "NZ",
-    PHP: "PH",
-    PLN: "PL",
-    RON: "RO",
-    SEK: "SE",
-    SGD: "SG",
-    THB: "TH",
-    TRY: "TR",
-    ZAR: "ZA",
-    USD: "US",
-  };
+  let rates = {};
 
-  const CurrencyToCountry = {
-    AUD: "Australia",
-    BGN: "Bulgaria",
-    BRL: "Brazil",
-    CAD: "Canada",
-    CHF: "Switzerland",
-    CNY: "China",
-    CZK: "Czech Republic",
-    DKK: "Denmark",
-    EUR: "European Union",
-    GBP: "United Kingdom",
-    HKD: "Hong Kong",
-    HUF: "Hungary",
-    IDR: "Indonesia",
-    ILS: "Israel",
-    INR: "India",
-    ISK: "Iceland",
-    JPY: "Japan",
-    KRW: "South Korea",
-    MXN: "Mexico",
-    MYR: "Malaysia",
-    NOK: "Norway",
-    NZD: "New Zealand",
-    PHP: "Philippines",
-    PLN: "Poland",
-    RON: "Romania",
-    SEK: "Sweden",
-    SGD: "Singapore",
-    THB: "Thailand",
-    TRY: "Turkey",
-    ZAR: "South Africa",
-    USD: "United States",
-  };
+  convertorBtn.disabled = true;
 
-  // Fetch currency rates
+  // ----------------------------
+  // Fetch Currency Rates
+  // ----------------------------
   const getRates = async () => {
     try {
       const response = await fetch(
-        "https://api.frankfurter.app/latest?from=USD"
+        "https://api.frankfurter.dev/v1/latest?from=USD",
       );
-      if (!response.ok) throw new Error("Network response was not ok");
-      const data = await response.json();
-      Rates = data.rates;
-      Rates[data.base] = 1;
 
-      // Populate select options
-      for (const code in Rates) {
-        select.forEach((s) => {
+      if (!response.ok) {
+        throw new Error("Failed to fetch exchange rates.");
+      }
+
+      const data = await response.json();
+
+      rates = {
+        ...data.rates,
+        [data.base]: 1,
+      };
+
+      for (const code in rates) {
+        selects.forEach((select) => {
           const option = document.createElement("option");
+
           option.textContent = CurrencyToCountry[code] || code;
-          option.value = Rates[code];
+          option.value = rates[code];
           option.dataset.code = code;
 
-          // Default selections
-          if (code === "USD" && s.id === "from_select") {
+          if (code === "USD" && select.id === "from_select") {
             option.selected = true;
-            document.getElementById(
-              "flagFrom"
-            ).innerHTML = `<img src="https://flagsapi.com/${CurrencyToCountryCode[code]}/shiny/64.png">`;
-          }
-          if (code === "INR" && s.id === "to_select") {
-            option.selected = true;
-            document.getElementById(
-              "flagTo"
-            ).innerHTML = `<img src="https://flagsapi.com/${CurrencyToCountryCode[code]}/shiny/64.png">`;
           }
 
-          s.appendChild(option);
+          if (code === "INR" && select.id === "to_select") {
+            option.selected = true;
+          }
+
+          select.appendChild(option);
         });
       }
+
+      updateFlag(fromSelect, flagFrom);
+      updateFlag(toSelect, flagTo);
+
+      convertorBtn.disabled = false;
     } catch (error) {
-      console.error("Error fetching rates:", error);
-      resultDisplay.innerHTML = `<b style="color:red">Failed to fetch rates. Try again later.</b>`;
+      console.error(error);
+      resultDisplay.innerHTML =
+        '<b style="color:red">Failed to fetch exchange rates.</b>';
     }
   };
 
   getRates();
 
-  // Amount input logic
-  amount.addEventListener("change", (e) => {
-    inputValue = parseFloat(e.target.value);
-  });
+  // ----------------------------
+  // Update Button Styling
+  // ----------------------------
+  amount.addEventListener("input", () => {
+    const value = amount.value.trim();
 
-  amount.addEventListener("input", (e) => {
-    const val = e.target.value;
-    if (!isNaN(val) && val !== "") {
-      input.style.background = "rgba(40, 40, 40, 0.8)";
-      input.style.border = "none";
-      convertorBtn.style.background =
-        "linear-gradient(90deg, #b51732ff, #111769ff)";
+    if (value !== "" && !isNaN(parseFloat(value))) {
+      amount.style.background = "rgba(40,40,40,0.8)";
+      amount.style.border = "none";
+
+      convertorBtn.style.background = "linear-gradient(90deg,#b51732,#111769)";
       convertorBtn.style.color = "#fff";
     } else {
-      input.style.border = "2px solid #ff4d4d";
-      convertorBtn.style.background = "rgba(63, 68, 63, 0.8)";
+      amount.style.border = "2px solid #ff4d4d";
+
+      convertorBtn.style.background = "rgba(63,68,63,0.8)";
       convertorBtn.style.color = "#ccc";
     }
   });
 
-  // Conversion logic
+  // ----------------------------
+  // Convert Currency
+  // ----------------------------
   const convertCurrency = () => {
-    const rateOfFrom = parseFloat(fromSelect.value);
-    const rateOfTo = parseFloat(toSelect.value);
+    const inputValue = parseFloat(amount.value);
 
-    if (isNaN(inputValue)) {
-      resultDisplay.innerHTML = `<b style="color:red">Enter a valid input !!!</b>`;
+    if (isNaN(inputValue) || inputValue <= 0) {
+      resultDisplay.innerHTML =
+        '<b style="color:red">Please enter a valid amount.</b>';
       return;
     }
 
-    const finalValue = (inputValue / rateOfFrom) * rateOfTo;
-    resultDisplay.innerHTML = `Amount = ${finalValue.toFixed(2)}`;
+    const rateOfFrom = parseFloat(fromSelect.value);
+    const rateOfTo = parseFloat(toSelect.value);
+
+    if (isNaN(rateOfFrom) || isNaN(rateOfTo)) {
+      resultDisplay.innerHTML =
+        '<b style="color:red">Currency rates not available.</b>';
+      return;
+    }
+
+    const convertedAmount = (inputValue / rateOfFrom) * rateOfTo;
+
+    const fromCode = fromSelect.selectedOptions[0].dataset.code;
+
+    const toCode = toSelect.selectedOptions[0].dataset.code;
+
+    resultDisplay.innerHTML = `
+      ${inputValue} ${fromCode} =
+      <strong>${convertedAmount.toFixed(2)} ${toCode}</strong>
+    `;
   };
 
   convertorBtn.addEventListener("click", (e) => {
@@ -162,33 +128,49 @@ document.addEventListener("DOMContentLoaded", () => {
     convertCurrency();
   });
 
-  // Update flag
-  const updateFlag = (selectElem, flagElemId) => {
-    selectElem.addEventListener("change", (e) => {
-      const currencyCode = e.target.selectedOptions[0].dataset.code;
-      const flagCode = CurrencyToCountryCode[currencyCode] || "UN";
-      document.getElementById(
-        flagElemId
-      ).innerHTML = `<img src="https://flagsapi.com/${flagCode}/shiny/64.png">`;
-      convertCurrency();
-    });
-  };
+  // ----------------------------
+  // Update Flag
+  // ----------------------------
+  function updateFlag(selectElement, flagElement) {
+    const currencyCode = selectElement.selectedOptions[0]?.dataset.code;
 
-  updateFlag(fromSelect, "flagFrom");
-  updateFlag(toSelect, "flagTo");
+    const countryCode = CurrencyToCountryCode[currencyCode] || "UN";
 
-  // Swap currencies on arrow click
+    flagElement.innerHTML = `
+      <img
+        src="https://flagsapi.com/${countryCode}/shiny/64.png"
+        alt="${currencyCode} flag"
+      >
+    `;
+  }
+
+  fromSelect.addEventListener("change", () => {
+    updateFlag(fromSelect, flagFrom);
+    convertCurrency();
+  });
+
+  toSelect.addEventListener("change", () => {
+    updateFlag(toSelect, flagTo);
+    convertCurrency();
+  });
+
+  // ----------------------------
+  // Swap Currency
+  // ----------------------------
   swapBtn.addEventListener("click", () => {
-    // Swap selected indices
-    const tempIndex = fromSelect.selectedIndex;
-    fromSelect.selectedIndex = toSelect.selectedIndex;
-    toSelect.selectedIndex = tempIndex;
+    const fromValue = fromSelect.value;
+    const fromIndex = fromSelect.selectedIndex;
 
-    // Swap flags manually
-    const tempFlag = document.getElementById("flagFrom").innerHTML;
-    document.getElementById("flagFrom").innerHTML =
-      document.getElementById("flagTo").innerHTML;
-    document.getElementById("flagTo").innerHTML = tempFlag;
+    fromSelect.value = toSelect.value;
+    toSelect.value = fromValue;
+
+    if (fromSelect.value === "") {
+      fromSelect.selectedIndex = toSelect.selectedIndex;
+      toSelect.selectedIndex = fromIndex;
+    }
+
+    updateFlag(fromSelect, flagFrom);
+    updateFlag(toSelect, flagTo);
 
     convertCurrency();
   });
