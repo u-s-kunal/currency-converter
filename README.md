@@ -6,8 +6,7 @@ The application fetches the latest exchange rates from the Frankfurter API and a
 
 ## Live Demo
 
-Add your live demo URL here
-
+https://u-s-kunal.github.io/currency-converter/
 ---
 
 ## Overview
